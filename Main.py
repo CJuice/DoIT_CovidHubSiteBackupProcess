@@ -1,6 +1,8 @@
 """
 Resource for Hub Site Cloning:
-https://www.esri.com/arcgis-blog/products/arcgis-hub/announcements/introducing-arcgis-hub-python-api-for-sites/
+Blog: https://www.esri.com/arcgis-blog/products/arcgis-hub/announcements/introducing-arcgis-hub-python-api-for-sites/
+GitHub repo for acrgishub module: https://github.com/Esri/hub-py/blob/master/README.md
+
 """
 
 
@@ -10,9 +12,11 @@ def main():
     from arcgis.gis import GIS
     import configparser
     import os
+    from arcgishub import hub
 
     # VARIABLES
     _root_project_path = os.path.dirname(__file__)
+    initiative_id = "2df025de8c074d248175994b2e04d4cf"  # Justin's demo
 
     # Credentials access and variable creation
     credentials_file = fr"{_root_project_path}\Credentials\Credentials.cfg"
@@ -31,9 +35,10 @@ def main():
 
     # FUNCTIONALITY
     # Create a gis connection and get the users in the hub
-    gis = GIS(url=md_hub_url, username=md_hub_admin, password=md_hub_pwd)
-
-    return
+    gis = GIS(url=md_hub_url, username=md_hub_admin, password=md_hub_pwd) # old way??
+    # md_hub = hub.Hub(url=md_hub_url, username=md_hub_admin, password=md_hub_pwd)
+    my_hub = gis.hub
+    print(my_hub.enterprise_org_id)
 
 
 if __name__ == "__main__":
