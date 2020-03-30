@@ -13,6 +13,7 @@ def main():
     import configparser
     import os
     from arcgishub import hub
+    import json
 
     # VARIABLES
     _root_project_path = os.path.dirname(__file__)
@@ -35,10 +36,17 @@ def main():
 
     # FUNCTIONALITY
     # Create a gis connection and get the users in the hub
-    gis = GIS(url=md_hub_url, username=md_hub_admin, password=md_hub_pwd) # old way??
-    # md_hub = hub.Hub(url=md_hub_url, username=md_hub_admin, password=md_hub_pwd)
-    my_hub = gis.hub
-    print(my_hub.enterprise_org_id)
+    # gis = GIS(url=md_hub_url, username=md_hub_admin, password=md_hub_pwd) # old way??
+    # my_hub = gis.hub
+    print(f"URL: {md_hub_url}")
+    print(f"ADMIN: {md_hub_admin}")
+    print(f"PWD: {md_hub_pwd}")
+    my_hub = hub.Hub(url=md_hub_url, username=md_hub_admin, password=md_hub_pwd)
+    # print(my_hub.enterprise_org_id)
+    try:
+        print(my_hub.initiatives())
+    except json.JSONDecodeError as jde:
+        print(f"y_hub.initiatives() returned {jde}")
 
 
 if __name__ == "__main__":
