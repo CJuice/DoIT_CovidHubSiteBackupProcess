@@ -2,6 +2,8 @@
 Clone a Hub Site and Initiative, move clones to backup folder.
 Establish a connection to arcgis online hub using arcgishub module from ESRI. Get the initiative item of interest.
 Clone the item and then move the cloned initiative and associated application to the backup folder.
+ISSUE: When moved to server can't pip install arcgis hub, think because can't connect to github from server.
+    Command for install is: pip install -e git+https://github.com/esridc/hub-py.git#egg=arcgishub
 
 Resource for Hub Site Cloning:
 Blog: https://www.esri.com/arcgis-blog/products/arcgis-hub/announcements/introducing-arcgis-hub-python-api-for-sites/
