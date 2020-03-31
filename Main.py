@@ -1,4 +1,8 @@
 """
+Clone a Hub Site and Initiative, move clones to backup folder.
+Establish a connection to arcgis online hub using arcgishub module from ESRI. Get the initiative item of interest.
+Clone the item and then move the cloned initiative and associated application to the backup folder.
+
 Resource for Hub Site Cloning:
 Blog: https://www.esri.com/arcgis-blog/products/arcgis-hub/announcements/introducing-arcgis-hub-python-api-for-sites/
 GitHub repo for acrgishub module: https://github.com/Esri/hub-py/blob/master/README.md
@@ -17,12 +21,16 @@ def main():
 
     # VARIABLES
     # # # initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
-    initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # J's demo site cloned to mdimapdatacatalog account
+    initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
 
-    # TODO: Search for a format that doesn't result in an unusable url
+    # Destination folder for clones
+    # # # clone_to_folder = "Covid Site Backups"  # PROD
+    clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
+
+    # Format that results in valid url for cloned site
     date_format = "%y%m%d-%H%M"
-    # backup_text = f"DEVCovidBackup-{datetime.datetime.now().strftime(date_format)}"  # Valid url format
-    backup_text = f"{datetime.datetime.now().strftime(date_format)}-DEVCovidBackup"
+    # # # backup_text = f"{datetime.datetime.now().strftime(date_format)}-PRODCovidBackup"  # PROD
+    backup_text = f"{datetime.datetime.now().strftime(date_format)}-DEVCovidBackup"  # DEV
 
     # Credentials access and variable creation
     _root_project_folder = os.path.dirname(__file__)
@@ -31,16 +39,13 @@ def main():
     config_parser = configparser.ConfigParser()
     config_parser.read(credentials_file)
 
-    # md_url = config_parser["DEFAULT"]["url_hub"]
     md_url = config_parser["DEFAULT"]["url_maps"]
     md_admin = config_parser["DEFAULT"]["login"]
     md_pwd = config_parser["DEFAULT"]["password"]
 
-    # Destination folder for clones
-    clone_to_folder = "Hub Clone Automation DEVELOPMENT"
-
     # FUNCTIONALITY
     # Create a connection to the hub using the "new" arcgishub module and explore visibility of target initiative
+    # TODO: Monitor for thrown exceptions and then add handling
     my_hub_arcgishub = hub.Hub(url=md_url, username=md_admin, password=md_pwd)
 
     # Gets a specific initiative
@@ -49,8 +54,8 @@ def main():
 
     # This seems to take a few minutes to complete
     # Clone the initiative and the application (site)
-    print(f"Cloning items to {clone_to_folder}")
-    print(f"Backup items titles will begin with {backup_text}")
+    print(f"Cloning items to folder '{clone_to_folder}'")
+    print(f"Backup items titles will begin with '{backup_text}'")
     cloned_initiative_arcgishub = my_hub_arcgishub.initiatives.clone(target_initiative_arcgishub,
                                                                      title=f"{backup_text}")
     cloned_application_arcgishub = my_hub_arcgishub.sites.get(cloned_initiative_arcgishub.site_id)
@@ -63,6 +68,7 @@ def main():
     print(f"Move Application response: {move_application_result}")
 
     print("Process Complete")
+
 
 if __name__ == "__main__":
     main()
