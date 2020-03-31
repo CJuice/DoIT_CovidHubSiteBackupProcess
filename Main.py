@@ -49,6 +49,8 @@ def main():
 
     # This seems to take a few minutes to complete
     # Clone the initiative and the application (site)
+    print(f"Cloning items to {clone_to_folder}")
+    print(f"Backup items titles will begin with {backup_text}")
     cloned_initiative_arcgishub = my_hub_arcgishub.initiatives.clone(target_initiative_arcgishub,
                                                                      title=f"{backup_text}")
     cloned_application_arcgishub = my_hub_arcgishub.sites.get(cloned_initiative_arcgishub.site_id)
@@ -60,6 +62,7 @@ def main():
     print(f"Move Initiative response: {move_initiative_result}")
     print(f"Move Application response: {move_application_result}")
 
+    print("Process Complete")
 
 if __name__ == "__main__":
     main()
