@@ -22,16 +22,16 @@ def main():
     import os
 
     # VARIABLES
-    # # # initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
+    # initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
     initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
 
     # Destination folder for clones
-    # # # clone_to_folder = "Covid Site Backups"  # PROD
+    # clone_to_folder = "Covid Site Backups"  # PROD
     clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
 
     # Format that results in valid url for cloned site
-    date_format = "%y%m%d-%H%M"
-    # # # backup_text = f"{datetime.datetime.now().strftime(date_format)}-PRODCovidBackup"  # PROD
+    date_format = "%Y%m%d-%H%M"
+    # backup_text = f"{datetime.datetime.now().strftime(date_format)}-PRODCovidBackup"  # PROD
     backup_text = f"{datetime.datetime.now().strftime(date_format)}-DEVCovidBackup"  # DEV
 
     # Credentials access and variable creation
@@ -58,8 +58,7 @@ def main():
     # Clone the initiative and the application (site)
     print(f"Cloning items to folder '{clone_to_folder}'")
     print(f"Backup items titles will begin with '{backup_text}'")
-    cloned_initiative_arcgishub = my_hub_arcgishub.initiatives.clone(target_initiative_arcgishub,
-                                                                     title=f"{backup_text}")
+    cloned_initiative_arcgishub = my_hub_arcgishub.initiatives.clone(target_initiative_arcgishub, title=f"{backup_text}")
     cloned_application_arcgishub = my_hub_arcgishub.sites.get(cloned_initiative_arcgishub.site_id)
 
     # Move initiative item and application item to backup folder
