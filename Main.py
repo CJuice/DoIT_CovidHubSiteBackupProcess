@@ -1,5 +1,5 @@
 """
-Clone a Hub Site and Initiative, move clones to backup folder.
+Clone a Hub Site and Initiative, and move the cloned items to the designated backup folder.
 Establish a connection to arcgis online hub using arcgishub module from ESRI. Get the initiative item of interest.
 Clone the item and then move the cloned initiative and associated application to the backup folder.
 ISSUE: When moved to server can't pip install arcgis hub, think because can't connect to github from server.
@@ -22,17 +22,17 @@ def main():
     import os
 
     # VARIABLES
-    # initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
-    initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
-
-    # Destination folder for clones
-    # clone_to_folder = "Covid Site Backups"  # PROD
-    clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
-
-    # Format that results in valid url for cloned site
     date_format = "%Y%m%d-%H%M"
+
+    # Production versions
     # backup_text = f"{datetime.datetime.now().strftime(date_format)}-PRODCovidBackup"  # PROD
+    # clone_to_folder = "Covid Site Backups"  # PROD
+    # initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
+
+    # Development versions
     backup_text = f"{datetime.datetime.now().strftime(date_format)}-DEVCovidBackup"  # DEV
+    clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
+    initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
 
     # Credentials access and variable creation
     _root_project_folder = os.path.dirname(__file__)
