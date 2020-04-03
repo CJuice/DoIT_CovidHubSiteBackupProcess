@@ -30,15 +30,15 @@ def main():
     # VARIABLES
     date_format = "%Y%m%d-%H%M"
 
-    # Production versions
-    backup_text = f"{datetime.datetime.now().strftime(date_format)}-PRODCovidBackup"  # PROD
-    clone_to_folder = "Covid Site Backups"  # PROD
-    initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
+    # # Production versions
+    # backup_text = f"{datetime.datetime.now().strftime(date_format)}-PRODCovidBackup"  # PROD
+    # clone_to_folder = "Covid Site Backups"  # PROD
+    # initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
 
     # Development versions
-    # backup_text = f"{datetime.datetime.now().strftime(date_format)}-DEVCovidBackup"  # DEV
-    # clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
-    # initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
+    backup_text = f"{datetime.datetime.now().strftime(date_format)}-DEVCovidBackup"  # DEV
+    clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
+    initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
 
     # Credentials access and variable creation
     _root_project_folder = os.path.dirname(__file__)
@@ -66,15 +66,6 @@ def main():
     print(f"Backup Initiative & App titles will begin with '{backup_text}'")
     cloned_initiative_arcgishub = my_hub_arcgishub.initiatives.clone(target_initiative_arcgishub, title=f"{backup_text}")
     cloned_appsite_arcgishub = my_hub_arcgishub.sites.get(cloned_initiative_arcgishub.site_id)
-
-    # TESTING
-    # TODO: Get the pages for the cloned site
-    pages = cloned_appsite_arcgishub.pages
-    # print(pages)
-    # # print(pages.__dict__)
-    print(pages.search(owner="mdimapdatacatalog"))
-
-    exit()
 
     # Move initiative item and application item to backup folder
     # EXCEPTION thrown when item already exists in folder, either because of duplicated names or item already in folder
