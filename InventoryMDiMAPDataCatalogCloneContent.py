@@ -31,7 +31,17 @@ def main():
     # FUNCTIONALITY
     # Create a gis connection and get the users in the hub
     gis = GIS(url=md_hub_url, username=md_hub_admin, password=md_hub_pwd)
-    
+    mdimapdatacatalog_user = gis.users.get("mdimapdatacatalog")
+    mdimap_folder_objs_list = mdimapdatacatalog_user.folders
+    print("Getting list of items in root folder")
+    root_folder_content_list = mdimapdatacatalog_user.items(folder=None, max_items=5000)
+    print(len(root_folder_content_list))
+    for item_obj in root_folder_content_list:
+        print(item_obj.title)
+
+    exit()
+    groups_list = mdimapdatacatalog_user.groups
+
 
     return
 
