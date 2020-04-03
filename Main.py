@@ -67,6 +67,15 @@ def main():
     cloned_initiative_arcgishub = my_hub_arcgishub.initiatives.clone(target_initiative_arcgishub, title=f"{backup_text}")
     cloned_appsite_arcgishub = my_hub_arcgishub.sites.get(cloned_initiative_arcgishub.site_id)
 
+    # TESTING
+    # TODO: Get the pages for the cloned site
+    pages = cloned_appsite_arcgishub.pages
+    # print(pages)
+    # # print(pages.__dict__)
+    print(pages.search(owner="mdimapdatacatalog"))
+
+    exit()
+
     # Move initiative item and application item to backup folder
     # EXCEPTION thrown when item already exists in folder, either because of duplicated names or item already in folder
     move_initiative_result = cloned_initiative_arcgishub.item.move(folder=clone_to_folder)
