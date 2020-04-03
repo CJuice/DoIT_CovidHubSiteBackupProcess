@@ -4,6 +4,12 @@ Establish a connection to arcgis online hub using arcgishub module from ESRI. Ge
 Clone the item and then move the cloned initiative and associated application to the backup folder.
 ISSUE: When moved to server can't pip install arcgis hub, think because can't connect to github from server.
     Command for install is: pip install -e git+https://github.com/esridc/hub-py.git#egg=arcgishub
+    To get/install git on the server you also have to connect to github it seems.
+    Will attempt to get/access arcgishub module through ArcPro.
+ISSUE: When pages are cloned their url is revised to end in "-copy-<milliseconds time stamp>". When this happens
+    the page links on the main hub application no longer route. Example, the Business Resources page becomes asset
+    Business Resources-copy-1585912032090 with a url of "/pages/business-resources-copy-1585912032090"
+
 
 Resource for Hub Site Cloning:
 Blog: https://www.esri.com/arcgis-blog/products/arcgis-hub/announcements/introducing-arcgis-hub-python-api-for-sites/
@@ -25,14 +31,14 @@ def main():
     date_format = "%Y%m%d-%H%M"
 
     # Production versions
-    # backup_text = f"{datetime.datetime.now().strftime(date_format)}-PRODCovidBackup"  # PROD
-    # clone_to_folder = "Covid Site Backups"  # PROD
-    # initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
+    backup_text = f"{datetime.datetime.now().strftime(date_format)}-PRODCovidBackup"  # PROD
+    clone_to_folder = "Covid Site Backups"  # PROD
+    initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
 
     # Development versions
-    backup_text = f"{datetime.datetime.now().strftime(date_format)}-DEVCovidBackup"  # DEV
-    clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
-    initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
+    # backup_text = f"{datetime.datetime.now().strftime(date_format)}-DEVCovidBackup"  # DEV
+    # clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
+    # initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
 
     # Credentials access and variable creation
     _root_project_folder = os.path.dirname(__file__)
@@ -57,14 +63,14 @@ def main():
     # This seems to take a few minutes to complete
     # Clone the initiative and the application (site)
     print(f"Cloning items to folder '{clone_to_folder}'")
-    print(f"Backup items titles will begin with '{backup_text}'")
+    print(f"Backup Initiative & App titles will begin with '{backup_text}'")
     cloned_initiative_arcgishub = my_hub_arcgishub.initiatives.clone(target_initiative_arcgishub, title=f"{backup_text}")
-    cloned_application_arcgishub = my_hub_arcgishub.sites.get(cloned_initiative_arcgishub.site_id)
+    cloned_appsite_arcgishub = my_hub_arcgishub.sites.get(cloned_initiative_arcgishub.site_id)
 
     # Move initiative item and application item to backup folder
     # EXCEPTION thrown when item already exists in folder, either because of duplicated names or item already in folder
     move_initiative_result = cloned_initiative_arcgishub.item.move(folder=clone_to_folder)
-    move_application_result = cloned_application_arcgishub.item.move(folder=clone_to_folder)
+    move_application_result = cloned_appsite_arcgishub.item.move(folder=clone_to_folder)
     print(f"Move Initiative response: {move_initiative_result}")
     print(f"Move Application response: {move_application_result}")
 
