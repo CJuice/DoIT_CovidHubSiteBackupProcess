@@ -43,19 +43,23 @@ def main():
     import os
 
     # VARIABLES
+    PROD = True
+    print(f"ALERT! Operating on PRODUCTION: {PROD}")
+
     date_format = "%Y%m%d %H%M"
     max_items = 5000
     mdimapdatacatalog_str = "mdimapdatacatalog"
     date_now_formatted = datetime.datetime.now().strftime(date_format)
     backup_text = f"{date_now_formatted} Backup"
 
-    # # Production versions
-    # clone_to_folder = "Covid Site Backups"  # PROD
-    # initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
-
-    # Development versions
-    clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
-    initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
+    if PROD:
+        # Production versions
+        clone_to_folder = "Covid Site Backups"  # PROD
+        initiative_id = "5a9bc8dfb3e54817ac61fa4d8aa33cc0"  # PROD
+    else:
+        # Development versions
+        clone_to_folder = "Hub Clone Automation DEVELOPMENT"  # DEV
+        initiative_id = "5d230c46f10b4c91a60c54e9bca879b6"  # DEV, J's demo site cloned to mdimapdatacatalog account
 
     # Credentials access and variable creation
     _root_project_folder = os.path.dirname(__file__)
