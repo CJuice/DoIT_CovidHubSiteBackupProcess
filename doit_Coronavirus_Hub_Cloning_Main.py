@@ -5,6 +5,9 @@ Clone the item and move the cloned initiative and application to the backup fold
 for python gis connection and search for cloned subpage items by name. The subpage names follow a format ending in
 what appears to be milliseconds since epoch timestamp. Perform checks on the item title to ensure clone related,
 and then rename the item. Then move the subpage items to the backup folder.
+
+NOTE: Requires src folder for arcgishub module, pulled down from ESRI GitHub, in project directory
+
 ISSUE: When moved to server can't pip install arcgis hub, think because can't connect to github from server.
     Command for install is: pip install -e git+https://github.com/esridc/hub-py.git#egg=arcgishub
     To get/install git on the server you also have to connect to github it seems.

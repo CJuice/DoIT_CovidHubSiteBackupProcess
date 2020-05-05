@@ -6,6 +6,8 @@ for python gis connection and search for cloned subpage items by name. The subpa
 what appears to be milliseconds since epoch timestamp. Perform checks on the item title to ensure clone related,
 and then rename the item. Then move the subpage items to the backup folder.
 
+#### NOTE: Requires src folder for arcgishub module, pulled down from ESRI GitHub, in project directory 
+
 Resources for Hub Site Cloning:
 - Blog: https://www.esri.com/arcgis-blog/products/arcgis-hub/announcements/introducing-arcgis-hub-python-api-for-sites/
 
