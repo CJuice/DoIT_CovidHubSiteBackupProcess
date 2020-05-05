@@ -1,8 +1,10 @@
 """
-TODO
-Clone a Hub Site and Initiative, and move the cloned items to the designated backup folder.
+Clone a Hub Site and Initiative and all subpages, then rename and move cloned items to the designated backup folder.
 Establish a connection to arcgis online hub using arcgishub module from ESRI. Get the initiative item of interest.
-Clone the item and then move the cloned initiative and associated application to the backup folder.
+Clone the item and move the cloned initiative and application to the backup folder. Create a standard arcgis api
+for python gis connection and search for cloned subpage items by name. The subpage names follow a format ending in
+what appears to be milliseconds since epoch timestamp. Perform checks on the item title to ensure clone related,
+and then rename the item. Then move the subpage items to the backup folder.
 ISSUE: When moved to server can't pip install arcgis hub, think because can't connect to github from server.
     Command for install is: pip install -e git+https://github.com/esridc/hub-py.git#egg=arcgishub
     To get/install git on the server you also have to connect to github it seems.
@@ -10,11 +12,20 @@ ISSUE: When moved to server can't pip install arcgis hub, think because can't co
 ISSUE: When pages are cloned their url is revised to end in "-copy-<milliseconds time stamp>". When this happens
     the page links on the main hub application no longer route. Example, the Business Resources page becomes asset
     Business Resources-copy-1585912032090 with a url of "/pages/business-resources-copy-1585912032090"
+    RESOLUTION: Query for clone related subpages using certain keywords. Filter further and check names to be sure
+    they contain '-copy-' and end in an int castable value as this appears to be the naming convention ESRI programmed
+    into the hub module functionality. For identified items, revise the title of the item and move the item into the
+    backup folder.
 
 Resource for Hub Site Cloning:
 Blog: https://www.esri.com/arcgis-blog/products/arcgis-hub/announcements/introducing-arcgis-hub-python-api-for-sites/
 GitHub repo for acrgishub module: https://github.com/Esri/hub-py/blob/master/README.md
 
+Author: CJuice
+Created: April 2020
+Revisions:
+20200505, CJuice: completed subpage content query, title rename, and move subpage items to backup
+    folder functionality.
 """
 
 
@@ -56,8 +67,12 @@ def main():
     md_pwd = config_parser["DEFAULT"]["password"]
 
     # FUNCTIONS
-    def check_title_for_seconds_ending(value):
-        # TODO: documentation
+    def check_title_for_seconds_ending(value: str) -> bool:
+        """
+        Check the parameter for presence of '-copy-', split on dashes (-), cast last value to int, return boolean
+        :param value: title string of the item of interst
+        :return: boolean indicating if title ends in seconds timestamp or not
+        """
         if "-copy-" not in value:
             return False
 
@@ -70,7 +85,7 @@ def main():
         else:
             return True
 
-    def find_cloned_keywords(title):
+    def find_cloned_keywords(title: str) -> bool:
         """
         Iterate over the list of clone related keywords and return True if a keyword is present in the item title.
         title: The title (string) of the item of interest.
@@ -83,8 +98,13 @@ def main():
                 return True
         return False
 
-    def revise_cloned_item_title(cloned_title, date_time_lead):
-        # TODO: documentation
+    def revise_cloned_item_title(cloned_title: str, date_time_lead: str) -> str:
+        """
+        Revise the title parameter and return the modified string
+        :param cloned_title: string title of the item of interest
+        :param date_time_lead: formatted datetime string
+        :return: string new title for item
+        """
         title_parts = cloned_title.split("-")
         subpage_name, *rest = title_parts
         return f"{date_time_lead} Backup {subpage_name}"
@@ -101,7 +121,7 @@ def main():
     print(f"Initiative title: {target_initiative_arcgishub.title}")
 
     # Need to clone the initiative and the application (site)
-    # This seems to take a few minutes to complete
+    # Takes a few minutes to complete
     new_hub_title = f"{backup_text} {target_initiative_arcgishub.title}"
     print(f"Cloning items to folder '{clone_to_folder}'")
     print(f"Backup Initiative & App titles will be '{new_hub_title}'")
@@ -138,7 +158,7 @@ def main():
     title_checked_clone_related_content = {item_id: title for item_id, title in clone_related_content.items()
                                            if check_title_for_seconds_ending(title)}
 
-    print(f"Following items identified as clone related subpages; will be moved to {mdimapdatacatalog_str}>{clone_to_folder}")
+    print(f"Items identified as clone related subpages; will be moved to {mdimapdatacatalog_str} > {clone_to_folder}")
     for item_id, item_title in title_checked_clone_related_content.items():
         print(f"\tItem: {item_id} \t {item_title}")
 
@@ -146,7 +166,7 @@ def main():
     for item_id in title_checked_clone_related_content.keys():
         item = gis_conn_standard.content.get(item_id)
         title_update_result = item.update(item_properties={"title": revise_cloned_item_title(cloned_title=item.title,
-                                                                                         date_time_lead=date_now_formatted)})
+                                                                                             date_time_lead=date_now_formatted)})
         print(f"\tUpdate title response: {title_update_result}")
         subpage_move_result = item.move(folder=clone_to_folder, owner=mdimapdatacatalog_str)
         print(f"\tMove Subpage response: {subpage_move_result}")
