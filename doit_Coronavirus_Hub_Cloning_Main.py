@@ -29,6 +29,7 @@ Created: April 2020
 Revisions:
 20200505, CJuice: completed subpage content query, title rename, and move subpage items to backup
     folder functionality.
+20200701, CJuice: revised clone action to handle TypeError was seeing occasionally for NoneType not subscriptable.
 """
 
 
@@ -132,8 +133,20 @@ def main():
     new_hub_title = f"{backup_text} {target_initiative_arcgishub.title}"
     print(f"Cloning items to folder '{clone_to_folder}'")
     print(f"Backup Initiative & App titles will be '{new_hub_title}'")
-    cloned_initiative_arcgishub = my_hub_arcgishub.initiatives.clone(target_initiative_arcgishub,
-                                                                     title=f"{new_hub_title}")
+
+    # TODO: Raises TypeError occasionally. References NoneType not subscriptable but unsure of which component is None
+    cloned_initiative_arcgishub = None
+    try:
+        cloned_initiative_arcgishub = my_hub_arcgishub.initiatives.clone(target_initiative_arcgishub,
+                                                                         title=f"{new_hub_title}")
+    except TypeError as te:
+        print(f"TypeError raised: \n{te}")
+        print(f"hub connection: {my_hub_arcgishub}")
+        print(f"hub initiative object: {target_initiative_arcgishub}")
+        print(f"cloned initiative object: {cloned_initiative_arcgishub}")
+        raise TypeError  # To cause a fail exit that visual cron will recognize
+
+    # TODO: This likely needs exception handling as well
     cloned_appsite_arcgishub = my_hub_arcgishub.sites.get(cloned_initiative_arcgishub.site_id)
 
     # CONTENT MOVEMENT
