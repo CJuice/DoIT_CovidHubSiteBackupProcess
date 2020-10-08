@@ -143,7 +143,7 @@ def main():
         print(f"TypeError raised: \n{te}")
         print(f"hub connection: {my_hub_arcgishub}")
         print(f"hub initiative object: {target_initiative_arcgishub}")
-        print(f"cloned initiative object: {cloned_initiative_arcgishub}")
+        print(f"cloned initiative object: {cloned_initiative_arcgishub}")  # This appears to be the None object
         raise TypeError  # To cause a fail exit that visual cron will recognize
 
     # TODO: This likely needs exception handling as well
